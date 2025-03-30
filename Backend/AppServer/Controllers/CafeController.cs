@@ -13,16 +13,34 @@ public class CafeController : ControllerBase
     {
         _mediator = mediator;
     }
-    
+
     [HttpGet("cafes")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto[]))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetCafes([FromQuery] GetCafesRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCafes([FromQuery] GetCafesRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var cafes = _mediator.Send(request, cancellationToken);
-            return Ok(cafes.Result);   
+            var cafes = await _mediator.Send(request, cancellationToken);
+            return Ok(cafes);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost("cafe")]
+    public async Task<IActionResult> AddCafe([FromForm] CreateCafeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var cafe = await _mediator.Send(request, cancellationToken);
+            if (cafe is null)
+            {
+                return Conflict();
+            }
+            return Ok(cafe);
         }
         catch (Exception e)
         {

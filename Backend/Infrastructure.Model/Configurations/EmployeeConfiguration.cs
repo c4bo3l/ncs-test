@@ -19,5 +19,7 @@ public class EmployeeConfiguration : BaseConfiguration<Employee>
 		builder.HasOne(x => x.Cafe).WithMany(x => x.Employees).HasForeignKey(e => e.CafeId);
 
 		builder.Property(x => x.StartDate);
+
+		builder.HasAlternateKey(x => x.Email);
 	}
 }

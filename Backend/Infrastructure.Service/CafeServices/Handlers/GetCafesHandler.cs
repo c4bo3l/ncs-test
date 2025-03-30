@@ -19,10 +19,13 @@ public class GetCafeHandler : IRequestHandler<GetCafesRequest, GetCafeDto[]>
 	public async Task<GetCafeDto[]> Handle(GetCafesRequest request, CancellationToken cancellationToken)
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+		var location = request.Location?.ToLowerInvariant()?.Trim();
+
 		var cafes = await context.Set<Cafe>()
 			.Include(c => c.Employees)
 			.AsNoTracking()
-			.Where(c => request.Location == null || c.Location.ToLower() == request.Location.ToLower())
+			.Where(c => string.IsNullOrEmpty(location) || c.Location.ToLower() == location)
 			.Select(c => new GetCafeDto
 			{
 				Id = c.Id,
