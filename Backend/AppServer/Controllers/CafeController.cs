@@ -31,6 +31,8 @@ public class CafeController : ControllerBase
     }
 
     [HttpPost("cafe")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddCafe([FromForm] CreateCafeRequest request, CancellationToken cancellationToken)
     {
         try
@@ -41,6 +43,42 @@ public class CafeController : ControllerBase
                 return Conflict();
             }
             return Ok(cafe);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPut("cafe")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateCafe([FromForm] UpdateCafeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var cafe = await _mediator.Send(request, cancellationToken);
+            if (cafe is null)
+            {
+                return Conflict();
+            }
+            return Ok(cafe);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpDelete("cafe")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteCafe([FromBody] DeleteCafeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(request, cancellationToken);
+            return Ok();
         }
         catch (Exception e)
         {

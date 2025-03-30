@@ -25,6 +25,11 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
         .RegisterAssemblyTypes(typeof(RegisterHelper).Assembly)
         .AsClosedTypesOf(typeof(IRequestHandler<,>))
         .InstancePerDependency();
+    
+    builder
+        .RegisterAssemblyTypes(typeof(RegisterHelper).Assembly)
+        .AsClosedTypesOf(typeof(IRequestHandler<>))
+        .InstancePerDependency();
 
     builder.RegisterType<CafeLogoService>()
         .As<ICafeLogoService>()

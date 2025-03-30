@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250329145503_UpdateCafeTable")]
-    partial class UpdateCafeTable
+    [Migration("20250330034818_InitTables")]
+    partial class InitTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,9 @@ namespace Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CafeId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Employee", (string)null);
                 });

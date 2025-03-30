@@ -9,35 +9,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Service.CafeServices.Handlers;
 
-public class CreateCafeHandler : IRequestHandler<CreateCafeRequest, GetCafeDto?>
+public class UpdateCafeHandler : IRequestHandler<UpdateCafeRequest, GetCafeDto?>
 {
 	private readonly IDbContextFactory<AppDbContext> dbContextFactory;
 	private readonly ICafeLogoService cafeLogoService;
 
-	public CreateCafeHandler(IDbContextFactory<AppDbContext> dbContextFactory, ICafeLogoService cafeLogoService)
+	public UpdateCafeHandler(IDbContextFactory<AppDbContext> dbContextFactory, ICafeLogoService cafeLogoService)
 	{
 		this.dbContextFactory = dbContextFactory;
 		this.cafeLogoService = cafeLogoService;
 	}
 
-	public async Task<GetCafeDto?> Handle(CreateCafeRequest request, CancellationToken cancellationToken)
+	public async Task<GetCafeDto?> Handle(UpdateCafeRequest request, CancellationToken cancellationToken)
 	{
-		var cafe = new Cafe
-		{
-			Id = Guid.NewGuid(),
-			Name = request.Name,
-			Description = request.Description,
-			Location = request.Location
-		};
+		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+		var cafe = await context.Set<Cafe>().FindAsync([request.Id], cancellationToken)
+			?? throw new KeyNotFoundException($"Cafe with Id {request.Id} not found");
+
+		context.Entry(cafe).CurrentValues.SetValues(request);
 
 		if (request.LogoFile is not null)
 		{
 			cafe.Logo = await cafeLogoService.UploadCafeLogoAsync(cafe.Id, request.LogoFile, cancellationToken);
 		}
-
-		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
-		await context.Set<Cafe>().AddAsync(cafe, cancellationToken);
-
+		
 		if (await context.SaveChangesAsync(cancellationToken) != 1)
 		{
 			return null;

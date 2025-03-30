@@ -33,6 +33,8 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost("employee")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetEmployeeDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddEmployee([FromBody] CreateEmployeeRequest request, CancellationToken cancellationToken)
     {
         try
@@ -45,6 +47,44 @@ public class EmployeeController : ControllerBase
             }
 
             return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("employee")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetEmployeeDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateEmployee([FromBody] UpdateEmployeeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await mediator.Send(request, cancellationToken);
+
+            if (result is null)
+            {
+                return Conflict();
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("employee")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteEmployee([FromBody] DeleteEmployeeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await mediator.Send(request, cancellationToken);
+            return Ok();
         }
         catch (Exception ex)
         {

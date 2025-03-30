@@ -12,14 +12,16 @@ public class EmployeeConfiguration : BaseConfiguration<Employee>
 		builder.HasKey(x => x.Id);
 
 		builder.Property(x => x.Name).IsRequired();
-		builder.Property(x => x.Name).IsRequired();
+		builder.Property(x => x.Email).IsRequired();
 		builder.Property(x => x.Phone).IsRequired();
 		builder.Property(x => x.Gender).HasMaxLength(1).IsRequired();
 
-		builder.HasOne(x => x.Cafe).WithMany(x => x.Employees).HasForeignKey(e => e.CafeId);
+		builder.HasOne(x => x.Cafe)
+			.WithMany(x => x.Employees)
+			.HasForeignKey(e => e.CafeId).OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade);
 
 		builder.Property(x => x.StartDate);
 
-		builder.HasAlternateKey(x => x.Email);
+		builder.HasIndex(x => x.Email).IsUnique();
 	}
 }

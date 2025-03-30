@@ -78,9 +78,10 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Email");
-
                     b.HasIndex("CafeId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Employee", (string)null);
                 });
@@ -89,7 +90,8 @@ namespace Infrastructure.Database.Migrations
                 {
                     b.HasOne("Infrastructure.Model.Cafe", "Cafe")
                         .WithMany("Employees")
-                        .HasForeignKey("CafeId");
+                        .HasForeignKey("CafeId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Cafe");
                 });

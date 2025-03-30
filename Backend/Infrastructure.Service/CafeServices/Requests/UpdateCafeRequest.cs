@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Infrastructure.Service.CafeServices.Requests;
 
-public class CreateCafeRequest : CafeBaseCRURequest, IRequest<GetCafeDto?>
+public class UpdateCafeRequest : CafeBaseCRURequest, IRequest<GetCafeDto?>
 {
-	
+	public required Guid Id { get; set; }
 }

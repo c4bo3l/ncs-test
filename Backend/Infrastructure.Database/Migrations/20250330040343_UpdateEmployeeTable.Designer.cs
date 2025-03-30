@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250330004821_UpdateEmployeeTable")]
+    [Migration("20250330040343_UpdateEmployeeTable")]
     partial class UpdateEmployeeTable
     {
         /// <inheritdoc />
@@ -81,9 +81,10 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Email");
-
                     b.HasIndex("CafeId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Employee", (string)null);
                 });
@@ -92,7 +93,8 @@ namespace Infrastructure.Database.Migrations
                 {
                     b.HasOne("Infrastructure.Model.Cafe", "Cafe")
                         .WithMany("Employees")
-                        .HasForeignKey("CafeId");
+                        .HasForeignKey("CafeId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Cafe");
                 });
