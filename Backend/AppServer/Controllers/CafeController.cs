@@ -13,16 +13,72 @@ public class CafeController : ControllerBase
     {
         _mediator = mediator;
     }
-    
+
     [HttpGet("cafes")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto[]))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult GetCafes([FromQuery] GetCafesRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCafes([FromQuery] GetCafesRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var cafes = _mediator.Send(request, cancellationToken);
-            return Ok(cafes.Result);   
+            var cafes = await _mediator.Send(request, cancellationToken);
+            return Ok(cafes);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost("cafe")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> AddCafe([FromBody] CreateCafeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var cafe = await _mediator.Send(request, cancellationToken);
+            if (cafe is null)
+            {
+                return Conflict();
+            }
+            return Ok(cafe);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPut("cafe")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateCafe([FromBody] UpdateCafeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var cafe = await _mediator.Send(request, cancellationToken);
+            if (cafe is null)
+            {
+                return Conflict();
+            }
+            return Ok(cafe);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpDelete("cafe")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteCafe([FromBody] DeleteCafeRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _mediator.Send(request, cancellationToken);
+            return Ok();
         }
         catch (Exception e)
         {

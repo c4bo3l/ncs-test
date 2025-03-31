@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250328144947_InitTables")]
+    [Migration("20250330034818_InitTables")]
     partial class InitTables
     {
         /// <inheritdoc />
@@ -40,7 +40,6 @@ namespace Infrastructure.Database.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Logo")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -83,6 +82,9 @@ namespace Infrastructure.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CafeId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Employee", (string)null);
                 });

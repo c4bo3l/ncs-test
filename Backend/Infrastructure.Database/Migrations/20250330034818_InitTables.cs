@@ -18,7 +18,7 @@ namespace Infrastructure.Database.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    Logo = table.Column<string>(type: "text", nullable: false),
+                    Logo = table.Column<string>(type: "text", nullable: true),
                     Location = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -52,6 +52,12 @@ namespace Infrastructure.Database.Migrations
                 name: "IX_Employee_CafeId",
                 table: "Employee",
                 column: "CafeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employee_Email",
+                table: "Employee",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />
