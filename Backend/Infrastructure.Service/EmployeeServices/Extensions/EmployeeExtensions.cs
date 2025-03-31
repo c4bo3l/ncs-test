@@ -13,6 +13,7 @@ public static class EmployeeExtensions
 			Email = employee.Email,
 			Name = employee.Name,
 			Phone = employee.Phone,
+			Gender = employee.Gender,
 			Cafe = employee.Cafe?.Name,
 			Days_worked = employee.StartDate.HasValue ? DateOnly.FromDateTime(DateTime.Now).DayNumber - employee.StartDate.Value.DayNumber : 0
 		};

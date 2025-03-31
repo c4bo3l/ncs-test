@@ -47,11 +47,7 @@ public class UpdateEmployeeHandler : IRequestHandler<UpdateEmployeeRequest, GetE
 		}
 
 		context.Entry(employee).CurrentValues.SetValues(request);
-
-		if (await context.SaveChangesAsync(cancellationToken) != 1)
-		{
-			return null;
-		}
+		await context.SaveChangesAsync(cancellationToken);
 
 		return employee.ToGetEmployeeDto();
 	}

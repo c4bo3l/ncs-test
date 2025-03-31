@@ -5,5 +5,5 @@ namespace Infrastructure.Service.EmployeeServices.Requests;
 
 public class GetEmployeesRequest : IRequest<GetEmployeeDto[]>
 {
-	public string? Cafe {get; set; } = null;
+	public Guid? Cafe {get; set; } = null;
 }

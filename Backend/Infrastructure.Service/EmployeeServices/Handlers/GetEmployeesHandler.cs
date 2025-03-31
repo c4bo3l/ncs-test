@@ -21,12 +21,10 @@ public class GetEmployeesHandler : IRequestHandler<GetEmployeesRequest, GetEmplo
 	{
 		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-		var cafe = request.Cafe?.ToLowerInvariant()?.Trim();
-
 		var employees = context.Set<Employee>()
 			.Include(c => c.Cafe)
 			.AsNoTracking()
-			.Where(c => string.IsNullOrEmpty(cafe) || (c.Cafe != null && c.Cafe.Name.ToLower() == cafe))
+			.Where(c => !request.Cafe.HasValue || c.CafeId == request.Cafe.Value)
 			.OrderBy(x => x.StartDate)
 			.AsAsyncEnumerable();
 

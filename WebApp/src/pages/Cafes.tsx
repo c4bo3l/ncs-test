@@ -27,7 +27,7 @@ const Cafes = () => {
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["cafes", cafeLocation],
-    queryFn: async () => await getCafes(cafeLocation),
+    queryFn: () => getCafes(cafeLocation),
   });
 
   const toggleDialog =
