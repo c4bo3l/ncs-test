@@ -1,6 +1,3 @@
-# Swagger in debug mode
-http://localhost:5000/swagger/index.html
-
 # DB Setting
 - Type: Postgres
 - Username: dbuser
