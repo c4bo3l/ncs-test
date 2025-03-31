@@ -12,12 +12,10 @@ namespace Infrastructure.Service.CafeServices.Handlers;
 public class CreateCafeHandler : IRequestHandler<CreateCafeRequest, GetCafeDto?>
 {
 	private readonly IDbContextFactory<AppDbContext> dbContextFactory;
-	private readonly ICafeLogoService cafeLogoService;
 
-	public CreateCafeHandler(IDbContextFactory<AppDbContext> dbContextFactory, ICafeLogoService cafeLogoService)
+	public CreateCafeHandler(IDbContextFactory<AppDbContext> dbContextFactory)
 	{
 		this.dbContextFactory = dbContextFactory;
-		this.cafeLogoService = cafeLogoService;
 	}
 
 	public async Task<GetCafeDto?> Handle(CreateCafeRequest request, CancellationToken cancellationToken)
@@ -27,13 +25,9 @@ public class CreateCafeHandler : IRequestHandler<CreateCafeRequest, GetCafeDto?>
 			Id = Guid.NewGuid(),
 			Name = request.Name,
 			Description = request.Description,
-			Location = request.Location
+			Location = request.Location,
+			Logo = request.Logo
 		};
-
-		if (request.LogoFile is not null)
-		{
-			cafe.Logo = await cafeLogoService.UploadCafeLogoAsync(cafe.Id, request.LogoFile, cancellationToken);
-		}
 
 		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 		await context.Set<Cafe>().AddAsync(cafe, cancellationToken);

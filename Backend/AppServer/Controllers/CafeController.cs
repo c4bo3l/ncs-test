@@ -33,7 +33,7 @@ public class CafeController : ControllerBase
     [HttpPost("cafe")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> AddCafe([FromForm] CreateCafeRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddCafe([FromBody] CreateCafeRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -53,7 +53,7 @@ public class CafeController : ControllerBase
     [HttpPut("cafe")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetCafeDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateCafe([FromForm] UpdateCafeRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateCafe([FromBody] UpdateCafeRequest request, CancellationToken cancellationToken)
     {
         try
         {
