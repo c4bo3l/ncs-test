@@ -3,7 +3,6 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Infrastructure.Database;
 using Infrastructure.Service;
-using Infrastructure.Service.FileServices.CafeLogoServices;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -30,10 +29,6 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
         .RegisterAssemblyTypes(typeof(RegisterHelper).Assembly)
         .AsClosedTypesOf(typeof(IRequestHandler<>))
         .InstancePerDependency();
-
-    builder.RegisterType<CafeLogoService>()
-        .As<ICafeLogoService>()
-        .InstancePerLifetimeScope();
 });
 
 // Add services to the container.
@@ -64,5 +59,6 @@ app.MapControllers();
 await using var serviceScope = app.Services.CreateAsyncScope();
 await using var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
 await dbContext.Database.MigrateAsync();
+await dbContext.Database.EnsureCreatedAsync();
 
 app.Run();

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useQuery } from "@tanstack/react-query";
 import useCafeApi from "../api/useCafeApi";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";

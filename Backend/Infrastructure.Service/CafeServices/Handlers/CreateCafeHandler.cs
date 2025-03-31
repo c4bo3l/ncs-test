@@ -3,7 +3,6 @@ using Infrastructure.Model;
 using Infrastructure.Service.CafeServices.Dtos;
 using Infrastructure.Service.CafeServices.Extensions;
 using Infrastructure.Service.CafeServices.Requests;
-using Infrastructure.Service.FileServices.CafeLogoServices;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

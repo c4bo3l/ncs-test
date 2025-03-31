@@ -1,3 +1,5 @@
 import CafeBaseCRURequest from "./cafeBaseCruRequest";
 
-export default interface CreateCafeDto extends CafeBaseCRURequest {}
+type CreateCafeDto = CafeBaseCRURequest;
+
+export default CreateCafeDto;
