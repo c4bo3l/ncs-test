@@ -14,6 +14,7 @@ public static class EmployeeExtensions
 			Name = employee.Name,
 			Phone = employee.Phone,
 			Gender = employee.Gender,
+			CafeId = employee.CafeId,
 			Cafe = employee.Cafe?.Name,
 			Days_worked = employee.StartDate.HasValue ? DateOnly.FromDateTime(DateTime.Now).DayNumber - employee.StartDate.Value.DayNumber : 0
 		};
