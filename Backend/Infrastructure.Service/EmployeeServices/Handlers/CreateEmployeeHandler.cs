@@ -3,6 +3,7 @@ using Infrastructure.Model;
 using Infrastructure.Service.EmployeeServices.Dtos;
 using Infrastructure.Service.EmployeeServices.Extensions;
 using Infrastructure.Service.EmployeeServices.Requests;
+using Infrastructure.Service.Helper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NanoidDotNet;
@@ -15,11 +16,16 @@ public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeRequest, GetE
 
 	public CreateEmployeeHandler(IDbContextFactory<AppDbContext> dbContextFactory)
 	{
-		this.dbContextFactory = dbContextFactory;
+		this.dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
 	}
 
 	public async Task<GetEmployeeDto?> Handle(CreateEmployeeRequest request, CancellationToken cancellationToken)
 	{
+		if (!ObjectHelper.Validate(request, out var exception))
+		{
+			throw exception ?? new ArgumentNullException(nameof(request), "Request cannot be null.");
+		}
+		
 		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
 		if (await context.Set<Employee>().AnyAsync(x => x.Email.ToLower() == request.Email.ToLower(), cancellationToken))

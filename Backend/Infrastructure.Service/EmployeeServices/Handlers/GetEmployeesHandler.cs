@@ -14,11 +14,13 @@ public class GetEmployeesHandler : IRequestHandler<GetEmployeesRequest, GetEmplo
 
 	public GetEmployeesHandler(IDbContextFactory<AppDbContext> dbContextFactory)
 	{
-		this.dbContextFactory = dbContextFactory;
+		this.dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
 	}
 
 	public async Task<GetEmployeeDto[]> Handle(GetEmployeesRequest request, CancellationToken cancellationToken)
 	{
+		ArgumentNullException.ThrowIfNull(request, nameof(request));
+		
 		using var context = await dbContextFactory.CreateDbContextAsync(cancellationToken);
 
 		var employees = context.Set<Employee>()

@@ -13,7 +13,7 @@ public class GetCafeHandler : IRequestHandler<GetCafesRequest, GetCafeDto[]>
 
 	public GetCafeHandler(IDbContextFactory<AppDbContext> dbContextFactory)
 	{
-		this.dbContextFactory = dbContextFactory;
+		this.dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
 	}
 
 	public async Task<GetCafeDto[]> Handle(GetCafesRequest request, CancellationToken cancellationToken)
